@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">GiphySearch</string>
+    <string name="searchGifsTitle">Search</string>
+    <string name="defautSearchQuery"></string>
+    <string name="noGifsMessage">There are no gifs :(</string>
+    <string name="errorLoadingGifsMessage">Unable to load gifs.</string>
+</resources>
