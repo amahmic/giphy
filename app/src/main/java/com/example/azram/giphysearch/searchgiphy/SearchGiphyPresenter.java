@@ -23,6 +23,8 @@ public class SearchGiphyPresenter implements SearchGiphyContract.SearchGiphyPres
 
     private String mLastSearchQuery = "";
 
+    private Call<GifAnswer> listaGifova;
+
     SearchGiphyPresenter(SearchGiphyContract.SearchGiphyView searchGiphyView) {
         mSearchGiphyView = searchGiphyView;
         realm = Realm.getDefaultInstance();
@@ -68,11 +70,15 @@ public class SearchGiphyPresenter implements SearchGiphyContract.SearchGiphyPres
         SearchGiphyService searchGiphyService = RetrofitClient.getInstance()
                 .getSearchGiphyService();
 
-        Call<GifAnswer> listaGifova = searchGiphyService.getGifs(searchQuery);
+        listaGifova = searchGiphyService.getGifs(searchQuery);
 
         listaGifova.enqueue(new Callback<GifAnswer>() {
             @Override
             public void onResponse(@NonNull Call<GifAnswer> call, @NonNull final Response<GifAnswer> response) {
+
+                if (mSearchGiphyView == null) {
+                    return;
+                }
 
                 if (response.code() != 200) {
                     mSearchGiphyView.showLoadingGifsError();
@@ -101,6 +107,11 @@ public class SearchGiphyPresenter implements SearchGiphyContract.SearchGiphyPres
 
             @Override
             public void onFailure(@NonNull Call<GifAnswer> call, @NonNull Throwable t) {
+
+                if (mSearchGiphyView == null) {
+                    return;
+                }
+
                 mSearchGiphyView.setLoadingIndicator(false);
                 mSearchGiphyView.showLoadingGifsError();
             }
@@ -118,6 +129,11 @@ public class SearchGiphyPresenter implements SearchGiphyContract.SearchGiphyPres
             });
             realm.close();
         }
+
+        if (listaGifova != null && listaGifova.isExecuted()) {
+            listaGifova.cancel();
+        }
+
         this.mSearchGiphyView = null;
     }
 }
