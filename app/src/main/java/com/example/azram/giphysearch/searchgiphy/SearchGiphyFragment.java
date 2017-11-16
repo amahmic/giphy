@@ -117,13 +117,11 @@ public class SearchGiphyFragment extends Fragment implements
     @Override
     public void showNoGifs() {
         //TODO: Napraviti neki view za nema gifova
-        adapter.updateData(null);
         showMessage(getString(R.string.noGifsMessage));
     }
 
     @Override
     public void showLoadingGifsError() {
-        adapter.updateData(null);
         showMessage(getString(R.string.errorLoadingGifsMessage));
     }
 
